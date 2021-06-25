@@ -1,32 +1,49 @@
 
 import React, {useState} from 'react';
 import {  Button, StyleSheet, Text, View } from 'react-native';
-import {CATEGORIES} from '../data/dummy-data';
+import { FlatList } from 'react-native-gesture-handler';
+import {CATEGORIES,MEALS} from '../data/dummy-data';
+import MealItem from '../components/MealItem'
 
 const CategoryMealsScreen = props => {
 
+    const renderMealItem = itemData => {
+        return (
+          <MealItem
+            title={itemData.item.title}
+            image={itemData.item.imageUrl}
+            duration={itemData.item.duration}
+            complexity={itemData.item.complexity}
+            affordability={itemData.item.affordability}
+            onSelectMeal={() => {
+              props.navigation.navigate({
+                routeName: 'MealDetail',
+                params: {
+                  mealId: itemData.item.id
+                }
+              });
+            }}
+          />
+        );
+      };
 
     // pasted in from CategoriesScreen.js as the below  
     // categoryId: itemData.item.id,
     // categoryTitle: itemData.item.title,
     // categoryColor: itemData.item.color
 
-    // just for practice we will search through a array given a key
+    //Get Current Category
     const cateId = props.navigation.getParam('categoryId')
 
-    //returns the item that 
-    const selectedCategory = CATEGORIES.find(cat => cat.id === cateId)
-
-
+    //Get the meals of current Category
+    const displayMeals = MEALS.filter(meal => meal.categoryIds.indexOf(cateId) >= 0 )
 
     return (<View style={styles.screen}>
-        <Text>{(selectedCategory.title != null) ? selectedCategory.title : "Mysterious"} </Text>
-        <Button title="Go to Detail " 
-        onPress={()=>{
-            props.navigation.navigate(
-             {   routeName:'MealDetail'}
-            )
-        }}/>
+        <FlatList
+            data={displayMeals}
+            keyExtractor={(item, index) => item.id}
+            renderItem={renderMealItem}
+        ></FlatList>
     </View>)
 }
 

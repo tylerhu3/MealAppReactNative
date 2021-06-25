@@ -12,11 +12,13 @@ import CategoryGridTile from "../components/CategoryGridTile";
  * categories of food
 */
 const CategoriesScreen = props => {
+       
+    
         /**
-         * The return for each item 
+         * On Clicked listener for each category
         */
-
         const categoryPressed = (itemData) =>{
+            console.log("cateGory ", itemData.item.title , " pressed")
             props.navigation.navigate({
 
                 //the component we will open 
@@ -31,7 +33,6 @@ const CategoriesScreen = props => {
 
             })
         }
-
 
         //Used by FlatList in main return()
         const renderGridItem = itemData => {
